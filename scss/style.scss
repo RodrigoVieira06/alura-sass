@@ -4,6 +4,43 @@ $dark-grey: #464646;
 $yellow: #fabe50;
 $img-width: 45%;
 
+%no-decoration {text-decoration: none;}
+%u-decoration {text-decoration: underline}
+
+@mixin reset-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+@mixin flx($property, $jty-cnt) {
+    display: flex;
+    #{$property}: &$jty-cnt;
+}
+
+@mixin for-phone-only {
+    @media (max-width: 767.98px) { @content; }
+}
+
+@mixin for-tablet-only {
+    @media (min-width: 768px) and (max-width: 1199.98px) { @content; }
+}
+
+@mixin for-desktop-only {
+    @media (min-width: 1200px) { @content; }
+    
+}
+
+@function calculateRem($size) {
+    @return $size / 16px * 1rem;
+}
+
+@mixin fontSize($size) {
+    font-size: $size;
+    font-size: calculateRem($size);
+    
+}
+
 .header {
     font-family: Arial, Helvetica, sans-serif;
 
@@ -23,12 +60,27 @@ $img-width: 45%;
             border-bottom: 1px solid $light-grey;
             margin-left: auto;
             margin-right: auto;
-            width: 80%;
-            padding: 20px 0;
+            @include for-phone-only{
+                width: 90%;
+                padding: 15px 0;
+                flex-wrap: wrap;
+            }
+            @include for-tablet-only{
+                width: 80%;
+                padding: 20px 0;
+            }
+            @include for-desktop-only{
+                width: 80%;
+                padding: 20px 0;
+            }
         }
 
         &__links {
             position: relative;
+            @include for-phone-only {
+                padding: 5px 0;
+            }
+
             &:not(:last-child)::after{
                 content: "";
                 position: absolute;
@@ -67,7 +119,7 @@ $img-width: 45%;
 
     &__txt {
         margin: auto;
-        font-size: 14px;
+        @include fontSize(14px);
     }
 }
 
@@ -78,6 +130,9 @@ $img-width: 45%;
     font-family: Arial, Helvetica, sans-serif;
 
     &__content {
+        @include for-phone-only {
+            width: 100%;
+        }
         width: 70%;
         padding: 40px 8px;
     }
@@ -140,7 +195,7 @@ $img-width: 45%;
     &__btn {
         text-decoration: none;
         font-size: 16px;
-        letter-spacing: 1.5;
+        letter-spacing: 1.5px;
         color: $purple;
         background-color: $yellow;
         padding: 10px 20px;
@@ -183,6 +238,64 @@ $img-width: 45%;
         margin-bottom: 10px;
         &:hover {
             color: $purple;
+        }
+    }
+
+    &__sidebar {
+        width: 25%;
+        padding: 40px 10px;
+    }
+
+    .sidebar {
+        &__top {
+            border: 1px solid $light-grey;
+            padding: 15px 20px;
+        }
+
+        &__title {
+            background-color: yellow;
+            text-align: center;
+            padding: 10px 20px;
+            margin: 0;
+            letter-spacing: 1.5px;
+        }
+
+        &__posts {
+            @include reset-list()
+        }
+
+        &__list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 15px 0;
+            &:not(:last-child) {
+                border-bottom: 1px dashed $light-grey;
+            }
+        }
+
+        &__img { 
+            width: 40%;
+        }
+
+        &__details {
+            width: 50%;
+            padding-left: 10px;
+        }
+
+        &__post-title {
+            font-size: 14px;
+            color: $purple;
+            @extend %no-decoration;
+            &:hover {
+                @extend %u-decoration;
+            }
+        }
+
+        &__post-date {
+            font-size: 12px;
+            margin: 5px 0 0 0;
         }
     }
 }
@@ -250,19 +363,90 @@ $img-width: 45%;
         align-items: center;
     }
 
-    &__img2 {
+    &__img-description {
         width: $img-width;
     }
 
     &__txt {
         width: calc(100% - #{$img-width});
         text-align: justify;
-        letter-spacing: 1;
+        letter-spacing: 1px;
     }
 
     &__p {
         font-size: 14px;
         padding: 10px 20px;
         color: $dark-grey;
+    }
+}
+
+
+.article {
+    width: 80%;
+    margin: 0 auto 40px;
+    font-family: Arial, Helvetica, sans-serif;
+
+    &__title {
+        background-color: $light-grey;
+        text-align: center;
+        padding: 20px;
+    }
+    &__h1 {
+        font-size: 22px;
+        color: $dark-grey;
+        letter-spacing: 1px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .breadcrumb {
+        @include flx(justify-content, center);
+        align-items: center;
+        &__link {
+            font-size: 12px;
+            @extend %no-decoration;
+            color: $dark-grey;
+
+            &:hover {
+                @extend %u-decoration;
+                color: $purple;
+            }
+        }
+        &__img {
+            width: 10px;
+            margin: 8px;
+        }
+    }
+    &__img {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    &__details {
+        @include flx(justify-content, center);
+        align-items: center;
+    }
+
+    &__date {
+        margin: 0 10px;
+        font-size: 12px;
+        font-style: italic;
+    }
+
+    &__tag {
+        font-size: 14px;
+        padding: 5px 7px;
+        color: $purple;
+        border: 1px solid $purple;
+        margin: 0 10px;
+    }
+
+    &__content {
+        font-weight: 100;
+        font-size: 14px;
+        color: $dark-grey;
+        padding: 10px 20px;
     }
 }
